@@ -16,7 +16,7 @@ type Task = {
 
 
 const App: React.FC = () => {
-	const data = [
+	const allData = [
 		{
 			title: 'Запланировано', id: uuid(), items: [
 				{ title: 'Задача 1', id: uuid() },
@@ -36,16 +36,17 @@ const App: React.FC = () => {
 			],
 		},
 	];
-	const [tasks, setTasks] = useState(data);
-	const [currentBoard, setCurrentBoard] = useState({});
-	const [currentTask, setCurrentTask] = useState({});
+	const [data, setData] = useState(allData);
+	const [currentBoard, setCurrentBoard] = useState<Board>();
+	const [currentTask, setCurrentTask] = useState<Task>();
 
-	const result = tasks.map(board => {
+	const result = data.map(board => {
 		const { title, id, items } = board;
 		return (
 			<div
 				className='app__board'
 				key={id}
+				id={id}
 			>
 				<h2>{title}</h2>
 				{items.map(task => {
@@ -54,11 +55,12 @@ const App: React.FC = () => {
 						<div
 							className="app__task"
 							key={id}
+							id={id}
 							onDragStart={(e) => onDragStart(e, board, task)}
 							onDragOver={(e) => onDragOver(e)}
 							onDragLeave={(e) => onDragLeave(e)}
 							onDragEnd={(e) => onDragEnd(e)}
-							onDrop={(e) => onDrop(e)}
+							onDrop={(e) => onDrop(e, board, task)}
 							draggable="true"
 						>
 							<p>{title}</p>
@@ -76,23 +78,45 @@ const App: React.FC = () => {
 
 	function onDragOver(e: any): void {
 		e.preventDefault();
-		let closest = e.target.closest('.app__task');
-		closest.style.boxShadow = '0px 0px 4px 1px LimeGreen'
+		const closest = e.target.closest('.app__task');
+		closest.style.borderBottom = '4px solid LimeGreen'
 	};
 
 	function onDragLeave(e: any): void {
-		let closest = e.target.closest('.app__task');
-		closest.style.boxShadow = 'none';
+		const closest = e.target.closest('.app__task');
+		closest.style.borderBottom = 'none';
 	};
 
 	function onDragEnd(e: any): void {
 
 	};
 
-	function onDrop(e: any): void {
+	function onDrop(e: any, board: Board, task: Task): void {
 		e.preventDefault();
-		let closest = e.target.closest('.app__task');
-		closest.style.boxShadow = 'none';
+		const targetTask = e.target.closest('.app__task');
+		targetTask.style.borderBottom = 'none';
+
+		if (currentTask) {
+			if (task.id === currentTask.id) {
+				return;
+			};
+
+			const filteredData = data.map(box => {
+				const newItems = box.items.filter(item => item.id !== currentTask.id);
+				return { ...box, ['items']: newItems }
+			});
+			const filteredBoardItems = board.items.filter(item => item.id !== currentTask.id);
+			const dropIndex = filteredBoardItems.findIndex(item => item.id === task.id) + 1;
+			const newBoard = { ...board, ['items']: [...filteredBoardItems.slice(0, dropIndex), currentTask, ...filteredBoardItems.slice(dropIndex)] };
+			const newData = filteredData.map(item => {
+				if (item.id !== newBoard.id) {
+					return item;
+				} else {
+					return newBoard;
+				};
+			});
+			setData(newData);
+		};
 	};
 
 
