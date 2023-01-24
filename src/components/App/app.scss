@@ -34,9 +34,14 @@ html {
 	}
 
 	&__task {
-		border: 1px solid DarkGoldenRod;
+		// border: 1px solid DarkGoldenRod;
 		border-radius: 15px;
 		padding: 5px 15px;
+		background: snow;
+
+		&:hover {
+			box-shadow: 0px 0px 3px 1px SandyBrown;
+		}
 
 		&:not(:last-child) {
 			margin-bottom: 7px;
