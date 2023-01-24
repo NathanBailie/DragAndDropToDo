@@ -1,0 +1,51 @@
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	font-family: sans-serif;
+}
+
+html {
+	background: #f1eddf;
+}
+
+.app {
+	padding: 15px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 10px;
+
+	&__board {
+		min-width: 300px;
+		min-height: 300px;
+		border: 1px solid darkorange;
+		border-radius: 15px;
+		padding: 15px;
+
+		h2 {
+			text-align: center;
+			color: Chocolate;
+			font-style: italic;
+			margin-bottom: 15px;
+			user-select: none;
+		}
+	}
+
+	&__task {
+		border: 1px solid DarkGoldenRod;
+		border-radius: 15px;
+		padding: 5px 15px;
+
+		&:not(:last-child) {
+			margin-bottom: 7px;
+		}
+
+		p {
+			text-align: center;
+			user-select: none;
+			cursor: pointer;
+		}
+	}
+}
