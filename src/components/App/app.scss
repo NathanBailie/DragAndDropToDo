@@ -6,7 +6,7 @@
 }
 
 html {
-	background: #f1eddf;
+	background: #323232;
 }
 
 .app {
@@ -20,28 +20,41 @@ html {
 	&__board {
 		min-width: 300px;
 		min-height: 300px;
-		border: 1px solid darkorange;
+		border: 1px solid #b9a972;
 		border-radius: 15px;
 		padding: 15px;
+	}
 
-		h2 {
-			text-align: center;
-			color: Chocolate;
-			font-style: italic;
-			margin-bottom: 15px;
-			user-select: none;
+	&__title {
+		text-align: center;
+		color: Chocolate;
+		font-style: italic;
+		margin-bottom: 15px;
+		user-select: none;
+
+		&_planned {
+			color: #ff9f5a;
+		}
+
+		&_inProcess {
+			color: #dde928;
+		}
+
+		&_finished {
+			color: #14cd1a;
 		}
 	}
 
 	&__task {
-		// border: 1px solid DarkGoldenRod;
 		border-radius: 15px;
 		padding: 5px 15px;
 		background: snow;
 		cursor: grab;
+		transition: all 0.1s linear;
 
 		&:hover {
-			box-shadow: 0px 0px 3px 1px SandyBrown;
+			box-shadow: 0px 0px 3px 1px yellow;
+			transform: scale(1.01);
 		}
 
 		&:not(:last-child) {

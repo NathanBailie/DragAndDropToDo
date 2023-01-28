@@ -2,17 +2,7 @@ import 'normalize.css';
 import './app.scss';
 import { useState } from 'react';
 import uuid from 'react-uuid';
-
-interface Board {
-	title: string,
-	id: string,
-	items: Task[] | [],
-};
-
-type Task = {
-	title: string,
-	id: string,
-};
+import { Board, Task } from '../interfaces';
 
 
 const App: React.FC = () => {
@@ -42,13 +32,22 @@ const App: React.FC = () => {
 
 	const result = data.map(board => {
 		const { title, id, items } = board;
+		let titleClasses = 'app__title';
+		if (title === 'Запланировано') {
+			titleClasses += ' app__title_planned';
+		} else if (title === 'В процессе') {
+			titleClasses += ' app__title_inProcess';
+		} else if (title === 'Выполнено') {
+			titleClasses += ' app__title_finished';
+		};
+
 		return (
 			<div
 				className='app__board'
 				key={id}
 				id={id}
 			>
-				<h2>{title}</h2>
+				<h2 className={titleClasses}>{title}</h2>
 				{items.map(task => {
 					const { title, id } = task;
 					return (
@@ -59,7 +58,6 @@ const App: React.FC = () => {
 							onDragStart={(e) => onDragStart(e, board, task)}
 							onDragOver={(e) => onDragOver(e)}
 							onDragLeave={(e) => onDragLeave(e)}
-							onDragEnd={(e) => onDragEnd(e)}
 							onDrop={(e) => onDrop(e, board, task)}
 							draggable="true"
 						>
@@ -85,10 +83,6 @@ const App: React.FC = () => {
 	function onDragLeave(e: any): void {
 		const closest = e.target.closest('.app__task');
 		closest.style.borderBottom = 'none';
-	};
-
-	function onDragEnd(e: any): void {
-
 	};
 
 	function onDrop(e: any, board: Board, task: Task): void {
